@@ -6,7 +6,7 @@ import Image from 'next/image'
 
 export default function Navbar() {
   return (
-    <nav className="sticky top-3 z-50 flex items-center justify-between max-w-4xl mx-auto  mt-5 border-3 p-2 rounded-full px-10">
+    <nav className="sticky top-3 z-50 flex items-center justify-between max-w-3xl mx-auto  mt-5 border-3 p-2 rounded-full px-10">
       <div className="rounded-full overflow-hidden h-12 w-12">
         <Image
         src="/Portfolioicon.png"

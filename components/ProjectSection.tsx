@@ -6,9 +6,9 @@ import { AiOutlineRight } from "react-icons/ai";
 function ProjectSection() {
   return (
     <div className="mt-3">
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl  mt-5 mb-3">Projects</h1>
-            <Link href="/project" className="hover:underline">
+          <div className="flex justify-between items-baseline border-b-2 pb-2">
+            <h1 className="text-2xl  mt-5">Projects</h1>
+            <Link href="/projects" className="hover:underline">
               more
             </Link>
           </div>
@@ -17,13 +17,12 @@ function ProjectSection() {
               <Link
                 className="proj group"
                 key={project.name.replace(" ", "-")}
-                href={`/project/${project.slug}`}
+                href={`/projects/${project.slug}`}
               >
-                <article className="flex flex-row gap-0 items-center justify-between lg:justify-center mt-5 mb-3 ">
+                <article className="flex flex-row gap-0 items-center justify-between lg:justify-center mt-5 mb-2">
                   <div className="flex flex-col justify-start opacity-100 flex-none shrink-0 h-auto relative whitespace-pre w-auto mr-3">
                     <div className='flex gap-3 items-center'>
-                    <img src={project.icon} alt="" className='w-10 h-8 rounded-lg' />
-                    <h1 className="text-lg font-medium leading-[1.3em] text-left text-gray-300 group-hover:text-white">
+                    <h1 className="text-lg font-medium leading-[1.3em] text-left  group-hover:text-green">
                       {project.name}
                     </h1>
                     </div>
