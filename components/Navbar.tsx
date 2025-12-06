@@ -9,7 +9,7 @@ export default function Navbar() {
     <nav className="sticky top-3 z-50 flex items-center justify-between max-w-3xl mx-auto  mt-5 border-3 p-2 rounded-full px-10">
       <div className="rounded-full overflow-hidden h-12 w-12">
         <Image
-        src="/Portfolioicon.png"
+        src="/Icons/Portfolioicon.png"
         width={50}
         height={50}
         alt="Portfolio Icon"
