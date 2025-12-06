@@ -1,7 +1,6 @@
 import React from 'react'
 import { projects } from "@/constants/index"
 import Link from 'next/link';
-import { AiOutlineRight } from "react-icons/ai";
 
 function ProjectSection() {
   return (
@@ -29,10 +28,7 @@ function ProjectSection() {
                     
                   </div>
                   <div className="w-full mr-2 border-y border-gray-700 rounded-2 transition duration-110 opacity-80 group-hover:border-white"></div>
-                  <AiOutlineRight
-                    className="text-gray-400 transition-all duration-[110ms] group-hover:text-white h-4 w-4 shrink-0"
-                    size={20}
-                  />
+                  
                 </article>
               </Link>
             ))}
