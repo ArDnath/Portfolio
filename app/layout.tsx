@@ -33,6 +33,9 @@ export default function RootLayout({
       data-theme="dark"
       className={`${vt323.variable} ${shareTechMono.variable}`}
     >
+      <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+      </head>
       <body className="min-h-full flex flex-col">
         <ThemeProvider>
           {children}

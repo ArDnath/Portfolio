@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* ── Tell Tailwind v4: activate dark: classes when data-theme="dark" is on any ancestor ── */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+
 /* ── Dark mode: true black ── */
 :root,
 [data-theme="dark"] {
@@ -10,7 +14,7 @@
 /* ── Light mode: clean white ── */
 [data-theme="light"] {
   --background: #ffffff;
-  --foreground: #0f172a;   /* slate-900 */
+  --foreground: #0f172a;
 }
 
 @theme inline {
@@ -26,7 +30,7 @@ body {
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-/* ── Theme toggle button — no border, soft shadow ── */
+/* ── Theme toggle button ── */
 .theme-toggle-btn {
   display:         inline-flex;
   align-items:     center;
@@ -52,4 +56,26 @@ body {
 
 .theme-toggle-btn:active {
   transform: scale(0.92);
+}
+
+/* ── Hide all scrollbars globally ── */
+::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+* {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }
