@@ -1,8 +1,16 @@
 @import "tailwindcss";
 
-:root {
+/* ── Dark mode: true black ── */
+:root,
+[data-theme="dark"] {
+  --background: #000000;
+  --foreground: #ffffff;
+}
+
+/* ── Light mode: clean white ── */
+[data-theme="light"] {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0f172a;   /* slate-900 */
 }
 
 @theme inline {
@@ -12,14 +20,36 @@
   --font-mono: var(--font-tech), ui-monospace, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+/* ── Theme toggle button — no border, soft shadow ── */
+.theme-toggle-btn {
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  width:           36px;
+  height:          36px;
+  flex-shrink:     0;
+  border:          none;
+  border-radius:   8px;
+  background:      transparent;
+  color:           var(--foreground);
+  cursor:          pointer;
+  opacity:         0.75;
+  box-shadow:      0 1px 4px rgba(0, 0, 0, 0.25);
+  transition:      opacity 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  opacity:    1;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  transform:  scale(1.1);
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.92);
 }
