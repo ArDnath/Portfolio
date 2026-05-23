@@ -19,7 +19,7 @@ export default function HeroSection() {
       {/* Dense grid */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 text-gray-400 dark:text-gray-600 opacity-[0.35] dark:opacity-[0.2]"
+        className="pointer-events-none absolute inset-0 text-gray-400 dark:text-gray-600 opacity-[0.1] dark:opacity-[0.01`]"
         style={{
           backgroundImage: `linear-gradient(to right, currentColor 1px, transparent 1px),
                             linear-gradient(to bottom, currentColor 1px, transparent 1px)`,
