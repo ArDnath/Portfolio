@@ -7,25 +7,38 @@ import { SiGithub, SiX, SiGmail } from "react-icons/si"
 const vt323 = VT323({ weight: "400", subsets: ["latin"] })
 
 const socialLinks = [
-  { href: "https://github.com/ariyamandebnath", label: "GitHub", Icon: SiGithub },
-  { href: "https://twitter.com/ariyamandebnath", label: "Twitter", Icon: SiX },
-  { href: "mailto:ariyaman@email.com", label: "Email", Icon: SiGmail },
+  { href: "https://github.com/ArDnath", label: "GitHub", Icon: SiGithub },
+  { href: "https://x.com/AriyamanDe12_24", label: "Twitter", Icon: SiX },
+  { href: "mailto:debnathariyaman1224@gmail.com", label: "Email", Icon: SiGmail },
 ] as const
 
 export default function HeroSection() {
   return (
     <div className="relative font-mono border-b border-dashed border-gray-300 dark:border-gray-700 bg-white dark:bg-black overflow-hidden px-6 pt-6 pb-5">
 
-      {/* Dense grid */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 text-gray-400 dark:text-gray-600 opacity-[0.1] dark:opacity-[0.01`]"
-        style={{
-          backgroundImage: `linear-gradient(to right, currentColor 1px, transparent 1px),
-                            linear-gradient(to bottom, currentColor 1px, transparent 1px)`,
-          backgroundSize: "20px 20px",
-        }}
-      />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          className="absolute inset-[-12%] text-gray-400 dark:text-gray-600 opacity-[0.1] dark:opacity-[0.1]"
+          style={{
+            backgroundImage: `linear-gradient(to right, currentColor 1px, transparent 1px),
+                              linear-gradient(to bottom, currentColor 1px, transparent 1px)`,
+            backgroundSize: "20px 20px",
+            WebkitMaskImage:
+              "radial-gradient(ellipse 72% 62% at 50% 44%, #000 0%, #000 38%, transparent 74%)",
+            maskImage:
+              "radial-gradient(ellipse 72% 62% at 50% 44%, #000 0%, #000 38%, transparent 74%)",
+          }}
+        />
+        <div
+          className="absolute inset-0 backdrop-blur-[10px] dark:backdrop-blur-[14px]"
+          style={{
+            WebkitMaskImage:
+              "radial-gradient(ellipse 88% 78% at 50% 44%, transparent 42%, #000 100%)",
+            maskImage:
+              "radial-gradient(ellipse 88% 78% at 50% 44%, transparent 42%, #000 100%)",
+          }}
+        />
+      </div>
 
 
       {/* Top bar */}
@@ -52,8 +65,8 @@ export default function HeroSection() {
           </div>
 
           <div className="flex items-center gap-2 mb-5">
-            <span className="w-7 h-px border-t border-dashed border-gray-300 dark:border-gray-700 flex-shrink-0" />
-            <p className="text-[9px] tracking-[.18em] uppercase text-gray-400 dark:text-gray-600 whitespace-nowrap">
+        
+            <p className="text-[9px] tracking-[.18em] uppercase text-gray-400 dark:text-gray-300 whitespace-nowrap">
               <span className={`${vt323.className} text-[14px] tracking-wider text-black dark:text-white`}>
                 Future-Ready
               </span>{" "}
@@ -84,19 +97,23 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* Avatar */}
-        <div className="flex-shrink-0 flex flex-col items-center gap-2">
-          <div className="relative p-2 border "> 
-            <Image
-              src="/logo.png"
-              alt="Ariyaman Debnath"
-              width={80}
-              height={80}
-              priority
-              className="w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 object-cover hover:grayscale-0 transition-all duration-500"
-            />
-          </div>
-        </div>
+        {/* Logo */}
+      <div className="flex-shrink-0 flex flex-col items-center gap-2">
+  <div className="group relative">
+    <div className="absolute inset-0 rounded-2xl bg-black/10 blur-2xl translate-y-4 scale-95 dark:bg-black/30" />
+    
+    <div className="relative overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_10px_30px_rgba(0,0,0,0.12),0_2px_10px_rgba(0,0,0,0.06)] transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.18),0_8px_20px_rgba(0,0,0,0.08)] dark:border-white/10 dark:bg-white/5 dark:shadow-[0_10px_30px_rgba(0,0,0,0.35),0_2px_10px_rgba(0,0,0,0.2)] dark:group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.45),0_8px_20px_rgba(0,0,0,0.28)]">
+      <Image
+        src="/logo.png"
+        alt="Ariyaman Debnath"
+        width={80}
+        height={80}
+        priority
+        className="relative z-[1] w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+      />
+    </div>
+  </div>
+</div>
       </div>
 
       {/* Bottom links — icons */}
@@ -110,7 +127,7 @@ export default function HeroSection() {
             aria-label={label}
             className="inline-flex items-center justify-center w-9 h-9 border border-dashed border-gray-300 dark:border-gray-700 rounded-md text-gray-400 dark:text-gray-600 hover:text-black dark:hover:text-white hover:border-black dark:hover:border-white hover:border-solid transition-all duration-150"
           >
-            <Icon size={18} aria-hidden className="shrink-0" />
+            <Icon size={12} aria-hidden className="shrink-0" />
           </Link>
         ))}
       </div>
