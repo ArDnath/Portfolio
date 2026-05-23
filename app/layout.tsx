@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { VT323, Share_Tech_Mono } from 'next/font/google'
 import { ThemeProvider } from "@/components/theme-provider"
+import { ProjectSelectionProvider } from "@/context/project-selection"
 import "./globals.css";
 
 const vt323 = VT323({
@@ -38,7 +39,9 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col">
         <ThemeProvider>
-          {children}
+          <ProjectSelectionProvider>
+            {children}
+          </ProjectSelectionProvider>
         </ThemeProvider>
       </body>
     </html>

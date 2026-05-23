@@ -1,15 +1,20 @@
 import type { NextConfig } from "next";
 
-const nextConfig = {
+const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: '*.aryamn.space',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "*.aryamn.space",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "ik.imagekit.io",
+        pathname: "/**",
       },
     ],
   },
-}
+};
 
-module.exports = nextConfig
+export default nextConfig;

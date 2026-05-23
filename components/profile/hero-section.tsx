@@ -2,8 +2,15 @@ import Image from "next/image"
 import ThemeToggle from "@/components/theme-toggle"
 import Link from "next/link"
 import { VT323 } from "next/font/google"
+import { SiGithub, SiX, SiGmail } from "react-icons/si"
 
 const vt323 = VT323({ weight: "400", subsets: ["latin"] })
+
+const socialLinks = [
+  { href: "https://github.com/ariyamandebnath", label: "GitHub", Icon: SiGithub },
+  { href: "https://twitter.com/ariyamandebnath", label: "Twitter", Icon: SiX },
+  { href: "mailto:ariyaman@email.com", label: "Email", Icon: SiGmail },
+] as const
 
 export default function HeroSection() {
   return (
@@ -12,7 +19,7 @@ export default function HeroSection() {
       {/* Dense grid */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.04] dark:opacity-[0.07]"
+        className="pointer-events-none absolute inset-0 text-gray-400 dark:text-gray-600 opacity-[0.35] dark:opacity-[0.2]"
         style={{
           backgroundImage: `linear-gradient(to right, currentColor 1px, transparent 1px),
                             linear-gradient(to bottom, currentColor 1px, transparent 1px)`,
@@ -20,19 +27,6 @@ export default function HeroSection() {
         }}
       />
 
-      {/* Radial corner fades — vignette that eats the grid at edges */}
-      
-      {/* Dark mode version of the same fade */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 hidden dark:block"
-        style={{
-          background: `radial-gradient(ellipse 70% 70% at 0% 0%,   black 0%, transparent 60%),
-                       radial-gradient(ellipse 70% 70% at 100% 0%,  black 0%, transparent 60%),
-                       radial-gradient(ellipse 70% 70% at 0% 100%,  black 0%, transparent 60%),
-                       radial-gradient(ellipse 70% 70% at 100% 100%, black 0%, transparent 60%)`,
-        }}
-      />
 
       {/* Top bar */}
       <div className="relative flex items-center justify-end gap-2 mb-5 z-10">
@@ -71,12 +65,18 @@ export default function HeroSection() {
           <div className="space-y-1">
             <p className="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">
               I{" "}
-              <span className="font-bold text-black dark:text-white">learn fast</span>,{" "}
-              <span className="font-bold text-black dark:text-white underline underline-offset-2 decoration-dashed">
+              <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                learn fast
+              </span>
+              ,{" "}
+              <span className="font-bold text-amber-600 dark:text-amber-400 underline underline-offset-2 decoration-dashed decoration-amber-500/60">
                 ship fast
               </span>
               , and treat every codebase{" "}
-              <span className="font-bold text-black dark:text-white">like it&apos;s production</span>.
+              <span className="font-bold text-violet-600 dark:text-violet-400">
+                like it&apos;s production
+              </span>
+              .
             </p>
             <p className="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">
               AI‑Native builder obsessed with shipping reliable software.
@@ -86,41 +86,31 @@ export default function HeroSection() {
 
         {/* Avatar */}
         <div className="flex-shrink-0 flex flex-col items-center gap-2">
-          <div className="relative">
-            <span className="absolute -top-1 -left-1 w-2.5 h-2.5 border-t-2 border-l-2 border-black dark:border-white" />
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 border-t-2 border-r-2 border-black dark:border-white" />
-            <span className="absolute -bottom-1 -left-1 w-2.5 h-2.5 border-b-2 border-l-2 border-black dark:border-white" />
-            <span className="absolute -bottom-1 -right-1 w-2.5 h-2.5 border-b-2 border-r-2 border-black dark:border-white" />
+          <div className="relative p-2 border "> 
             <Image
-              src="/Me.png"
+              src="/developer.png"
               alt="Ariyaman Debnath"
-              width={160}
-              height={160}
+              width={80}
+              height={80}
               priority
-              className="w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 object-cover grayscale hover:grayscale-0 transition-all duration-500"
+              className="w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 object-cover hover:grayscale-0 transition-all duration-500"
             />
           </div>
-          <span className={`${vt323.className} text-[13px] tracking-[.1em] text-gray-300 dark:text-gray-700`}>
-            ID_ARIYAMAN.PNG
-          </span>
         </div>
       </div>
 
-      {/* Bottom links */}
-      <div className="relative border-t border-dashed border-gray-200 dark:border-gray-800 mt-5 pt-4 z-10 flex items-center gap-6">
-        {[
-          { label: "GitHub_",  href: "https://github.com/ariyamandebnath" },
-          { label: "Twitter_", href: "https://twitter.com/ariyamandebnath" },
-          { label: "Mail_",    href: "mailto:ariyaman@email.com" },
-        ].map(({ label, href }) => (
+      {/* Bottom links — icons */}
+      <div className="relative border-t border-dashed pt-2 border-gray-400 dark:border-gray-800  z-10 flex items-center gap-5">
+        {socialLinks.map(({ href, label, Icon }) => (
           <Link
             key={label}
             href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`${vt323.className} text-[16px] tracking-[.1em] text-gray-400 dark:text-gray-600 border-b border-dashed border-gray-300 dark:border-gray-700 pb-px hover:text-black dark:hover:text-white hover:border-black dark:hover:border-white hover:border-solid transition-all duration-150`}
+            target={href.startsWith("mailto:") ? undefined : "_blank"}
+            rel={href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
+            aria-label={label}
+            className="inline-flex items-center justify-center w-9 h-9 border border-dashed border-gray-300 dark:border-gray-700 rounded-md text-gray-400 dark:text-gray-600 hover:text-black dark:hover:text-white hover:border-black dark:hover:border-white hover:border-solid transition-all duration-150"
           >
-            {label}
+            <Icon size={18} aria-hidden className="shrink-0" />
           </Link>
         ))}
       </div>

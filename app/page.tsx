@@ -7,7 +7,7 @@ export default function Home() {
       <div className="lg:border-r border-dashed border-gray-400 dark:border-gray-800 lg:h-full lg:overflow-y-auto no-scrollbar">
         <LeftGrid />
       </div>
-      <div className="lg:h-full lg:overflow-y-auto no-scrollbar">
+      <div className="hidden lg:block lg:h-full lg:overflow-hidden no-scrollbar">
         <RightGrid />
       </div>
     </div>

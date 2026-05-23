@@ -1,14 +1,41 @@
-import { ProjectData } from "@/lib/getProjectData"
+"use client"
+
+import type { Project } from "@/data/projects"
 import { TechIcon } from "./tech-icons"
 import { ArrowUpRight } from "lucide-react"
+import { imagekitUrl } from "@/lib/imagekit"
 
 interface ProjectCardProps {
-  data: ProjectData
+  project: Project
+  selected?: boolean
+  onSelect: () => void
 }
 
-export function ProjectCard({ data }: ProjectCardProps) {
+export function ProjectCard({ project, selected, onSelect }: ProjectCardProps) {
+  const thumbnailUrl = imagekitUrl(project.thumbnail.src, {
+    width: 600,
+    quality: 80,
+    format: "auto",
+  })
+
   return (
-    <div className="relative flex flex-col rounded-md border border-dashed border-gray-300 dark:border-gray-700 bg-white dark:bg-black group hover:border-gray-500 dark:hover:border-gray-400 hover:border-solid hover:shadow-[0_0_0_1px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_0_0_1px_rgba(255,255,255,0.04)] transition-all duration-200 font-mono overflow-hidden">
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={onSelect}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault()
+          onSelect()
+        }
+      }}
+      className={[
+        "relative flex flex-col rounded-md border border-dashed bg-white dark:bg-black group transition-all duration-200 font-mono overflow-hidden cursor-pointer",
+        selected
+          ? "border-black dark:border-white border-solid shadow-[0_0_0_1px_rgba(0,0,0,0.08)] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.08)]"
+          : "border-gray-300 dark:border-gray-700 hover:border-gray-500 dark:hover:border-gray-400 hover:border-solid hover:shadow-[0_0_0_1px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_0_0_1px_rgba(255,255,255,0.04)]",
+      ].join(" ")}
+    >
 
       {/* Shimmer scan line on hover */}
       <span
@@ -20,12 +47,9 @@ export function ProjectCard({ data }: ProjectCardProps) {
       <div className="relative w-full h-[120px] overflow-hidden border-b border-dashed border-gray-300 dark:border-gray-700 group-hover:border-gray-400 dark:group-hover:border-gray-600 transition-colors duration-200">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={data.imageUrl}
-          alt={data.name}
+          src={thumbnailUrl}
+          alt={project.thumbnail.alt}
           className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-[1.04] transition-all duration-500 ease-out"
-          onError={(e) => {
-            e.currentTarget.src = `https://opengraph.githubassets.com/1/${data.repoUrl.replace("https://github.com/", "")}`
-          }}
         />
         <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-white dark:from-black to-transparent" />
       </div>
@@ -36,13 +60,14 @@ export function ProjectCard({ data }: ProjectCardProps) {
         {/* Name + Live button */}
         <div className="flex items-center justify-between gap-2">
           <h3 className="text-[13px] font-bold tracking-widest uppercase text-black dark:text-white truncate">
-            {data.name}
+            {project.name}
           </h3>
 
           <a
-            href={data.liveUrl}
+            href={project.liveUrl}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
             className="group/live inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest text-white bg-black dark:bg-white dark:text-black rounded-md px-2.5 py-1.5 hover:opacity-70 active:scale-95 transition-all duration-150 whitespace-nowrap flex-shrink-0"
           >
             <span className="relative flex h-1.5 w-1.5 flex-shrink-0">
@@ -60,16 +85,17 @@ export function ProjectCard({ data }: ProjectCardProps) {
 
         {/* Description */}
         <p className="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2">
-          {data.description}
+          {project.description}
         </p>
 
         {/* Footer: tech chips only */}
         <div className="flex flex-wrap gap-1.5 border-t border-dashed border-gray-200 dark:border-gray-800 pt-3 mt-auto">
-          {data.fallbackTopics.map((topic) => (
+          {project.technologies.map((topic) => (
             <span
               key={topic}
               className="group/chip flex items-center h-6 px-1.5 border border-dashed border-gray-300 dark:border-gray-700 rounded-md text-gray-500 hover:text-black dark:hover:text-white hover:border-black dark:hover:border-white hover:border-solid hover:bg-gray-50 dark:hover:bg-white/5 transition-all duration-300 ease-out cursor-default"
               title={topic}
+              onClick={(e) => e.stopPropagation()}
             >
               <span className="max-w-0 overflow-hidden whitespace-nowrap text-[9px] tracking-wider opacity-0 group-hover/chip:max-w-[96px] group-hover/chip:opacity-100 group-hover/chip:mr-1.5 transition-all duration-300 ease-out">
                 {topic}

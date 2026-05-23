@@ -1,12 +1,7 @@
 import HeroSection from '@/components/profile/hero-section';
 import { ProjectsSection } from '../projects/project-section';
-import { projects as projectConfigs } from "@/lib/projects";
-import { getProjectData } from "@/lib/getProjectData";
 
-export default async function LeftGrid() {
-    const projectDataPromises = projectConfigs.map(config => getProjectData(config));
-    const projectsData = await Promise.all(projectDataPromises);
-
+export default function LeftGrid() {
     return (
         <div className="flex flex-col">
             <HeroSection />
@@ -14,9 +9,8 @@ export default async function LeftGrid() {
                 Deployed Projects
             </div>
             <div className='mt-4 px-4'>
-                <ProjectsSection projects={projectsData} />
+                <ProjectsSection />
             </div>
-            
         </div>
     )
 }

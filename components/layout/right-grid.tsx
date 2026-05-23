@@ -1,7 +1,11 @@
-import React from 'react'
+"use client"
+
+import { ProjectDetailBento } from "@/components/layout/project-detail-bento"
 
 export default function RightGrid() {
-    return (
-        <div>RightGrid</div>
-    )
+  return (
+    <div className="h-full min-h-[480px] lg:min-h-0 lg:h-full">
+      <ProjectDetailBento />
+    </div>
+  )
 }
