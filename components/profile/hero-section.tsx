@@ -70,7 +70,7 @@ export default function HeroSection() {
               <span className={`${vt323.className} text-[14px] tracking-wider text-black dark:text-white`}>
                 Future-Ready
               </span>{" "}
-              Full‑Stack Engineer
+              Full‑Stack Engineer tending to Devops
             </p>
             <span className="w-7 h-px border-t border-dashed border-gray-300 dark:border-gray-700 flex-shrink-0" />
           </div>
@@ -98,26 +98,26 @@ export default function HeroSection() {
         </div>
 
         {/* Logo */}
-      <div className="flex-shrink-0 flex flex-col items-center gap-2">
-  <div className="group relative">
-    <div className="absolute inset-0 rounded-2xl bg-black/10 blur-2xl translate-y-4 scale-95 dark:bg-black/30" />
-    
-    <div className="relative overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_10px_30px_rgba(0,0,0,0.12),0_2px_10px_rgba(0,0,0,0.06)] transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.18),0_8px_20px_rgba(0,0,0,0.08)] dark:border-white/10 dark:bg-white/5 dark:shadow-[0_10px_30px_rgba(0,0,0,0.35),0_2px_10px_rgba(0,0,0,0.2)] dark:group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.45),0_8px_20px_rgba(0,0,0,0.28)]">
-      <Image
-        src="/logo.png"
-        alt="Ariyaman Debnath"
-        width={80}
-        height={80}
-        priority
-        className="relative z-[1] w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-      />
-    </div>
-  </div>
-</div>
+        <div className="flex-shrink-0 flex flex-col items-center gap-2">
+          <div className="group relative cursor-pointer">
+            <div className="absolute inset-0 rounded-sm bg-black/10 blur-2xl translate-y-4 scale-95 dark:bg-black/30" />
+            <div className="relative overflow-hidden  border-slate-800 dark:border-slate-300  shadow-[10px_6.5px_10px_0_rgba(0,0,0,0.3)] dark:shadow-[10px_6.5px_10px_0_rgba(255,255,255,0.3)] transition-shadow duration-300 group-hover:shadow-[0_0_0_0_rgba(0,0,0,0)]">
+              <Image
+                src="/logo.png"
+                alt="Ariyaman Debnath"
+                width={80}
+                height={80}
+                priority
+                className="relative z-[1] w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 object-cover border-2 border-slate-800 dark:border-slate-300"
+              />
+            </div>
+          </div>
+        </div>
+
       </div>
 
       {/* Bottom links — icons */}
-      <div className="relative border-t border-dashed pt-2 border-gray-400 dark:border-gray-800  z-10 flex items-center gap-5">
+      <div className="relative  pt-2 border-gray-400 dark:border-gray-800  z-10 flex items-center gap-5">
         {socialLinks.map(({ href, label, Icon }) => (
           <Link
             key={label}
