@@ -33,8 +33,7 @@ export function ImageKitMedia({
   playsInline = true,
 }: ImageKitMediaProps) {
   const url = imagekitUrl(src, transform)
-  const isLocal = src.startsWith("/") && !process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT
-
+  const isSvg = src.toLowerCase().endsWith(".svg")
   const fillClass = fill ? `absolute inset-0 w-full h-full ${className}` : className
 
   if (type === "video") {
@@ -43,7 +42,11 @@ export function ImageKitMedia({
         src={url}
         className={fillClass}
         controls={controls}
-        controlsList={controls ? undefined : "nodownload noplaybackrate noremoteplayback nofullscreen"}
+        controlsList={
+          controls
+            ? undefined
+            : "nodownload noplaybackrate noremoteplayback nofullscreen"
+        }
         disablePictureInPicture
         autoPlay={autoPlay}
         muted={muted}
@@ -55,26 +58,24 @@ export function ImageKitMedia({
     )
   }
 
-  if (isLocal) {
-    if (fill) {
-      return (
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          priority={priority}
-          className={className}
-          sizes="(max-width: 1024px) 100vw, 66vw"
-        />
-      )
-    }
+  if (isSvg) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={url}
+        alt={alt}
+        className={fillClass}
+        loading={priority ? "eager" : "lazy"}
+      />
+    )
+  }
 
+  if (fill) {
     return (
       <Image
-        src={src}
+        src={url}
         alt={alt}
-        width={1200}
-        height={800}
+        fill
         priority={priority}
         className={className}
         sizes="(max-width: 1024px) 100vw, 66vw"
@@ -83,12 +84,14 @@ export function ImageKitMedia({
   }
 
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <Image
       src={url}
       alt={alt}
-      className={fillClass}
-      loading={priority ? "eager" : "lazy"}
+      width={1200}
+      height={800}
+      priority={priority}
+      className={className}
+      sizes="(max-width: 1024px) 100vw, 66vw"
     />
   )
 }

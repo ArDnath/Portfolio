@@ -1,9 +1,9 @@
 "use client"
 
+import { TechChip } from "@/components/projects/icons"
 import type { Project } from "@/data/projects"
-import { TechIcon } from "./tech-icons"
-import { ArrowUpRight } from "lucide-react"
 import { imagekitUrl } from "@/lib/imagekit"
+import { ArrowUpRight } from "lucide-react"
 
 interface ProjectCardProps {
   project: Project
@@ -36,14 +36,11 @@ export function ProjectCard({ project, selected, onSelect }: ProjectCardProps) {
           : "border-gray-300 dark:border-gray-700 hover:border-gray-500 dark:hover:border-gray-400 hover:border-solid hover:shadow-[0_0_0_1px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_0_0_1px_rgba(255,255,255,0.04)]",
       ].join(" ")}
     >
-
-      {/* Shimmer scan line on hover */}
       <span
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out bg-gradient-to-r from-transparent via-white/10 to-transparent"
       />
 
-      {/* Image */}
       <div className="relative w-full h-[120px] overflow-hidden border-b border-dashed border-gray-300 dark:border-gray-700 group-hover:border-gray-400 dark:group-hover:border-gray-600 transition-colors duration-200">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -54,10 +51,7 @@ export function ProjectCard({ project, selected, onSelect }: ProjectCardProps) {
         <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-white dark:from-black to-transparent" />
       </div>
 
-      {/* Content */}
       <div className="p-4 flex flex-col gap-2.5 flex-1">
-
-        {/* Name + Live button */}
         <div className="flex items-center justify-between gap-2">
           <h3 className="text-[13px] font-bold tracking-widest uppercase text-black dark:text-white truncate">
             {project.name}
@@ -83,28 +77,22 @@ export function ProjectCard({ project, selected, onSelect }: ProjectCardProps) {
           </a>
         </div>
 
-        {/* Description */}
         <p className="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2">
           {project.description}
         </p>
 
-        {/* Footer: tech chips only */}
-        <div className="flex flex-wrap gap-1.5 border-t border-dashed border-gray-200 dark:border-gray-800 pt-3 mt-auto">
+        <div
+          role="list"
+          className="flex flex-wrap gap-1.5 border-t border-dashed border-gray-300 dark:border-gray-700 pt-3 mt-auto"
+        >
           {project.technologies.map((topic) => (
-            <span
+            <TechChip
               key={topic}
-              className="group/chip flex items-center h-6 px-1.5 border border-dashed border-gray-300 dark:border-gray-700 rounded-md text-gray-500 hover:text-black dark:hover:text-white hover:border-black dark:hover:border-white hover:border-solid hover:bg-gray-50 dark:hover:bg-white/5 transition-all duration-300 ease-out cursor-default"
-              title={topic}
+              slug={topic}
               onClick={(e) => e.stopPropagation()}
-            >
-              <span className="max-w-0 overflow-hidden whitespace-nowrap text-[9px] tracking-wider opacity-0 group-hover/chip:max-w-[96px] group-hover/chip:opacity-100 group-hover/chip:mr-1.5 transition-all duration-300 ease-out">
-                {topic}
-              </span>
-              <TechIcon name={topic} size={12} className="flex-shrink-0" />
-            </span>
+            />
           ))}
         </div>
-
       </div>
     </div>
   )

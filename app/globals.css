@@ -79,3 +79,73 @@ body {
   -ms-overflow-style: none !important;
   scrollbar-width: none !important;
 }
+
+/* Architecture diagram: native scrollbars (overrides global hide) */
+.architecture-scrollbar {
+  -ms-overflow-style: scrollbar !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #6b7280 #e5e7eb !important;
+  scrollbar-gutter: stable;
+}
+
+[data-theme="dark"] .architecture-scrollbar {
+  scrollbar-color: #9ca3af #171717 !important;
+}
+
+.architecture-scrollbar::-webkit-scrollbar {
+  display: block !important;
+  -webkit-appearance: none !important;
+  width: 10px !important;
+  height: 10px !important;
+}
+
+.architecture-scrollbar::-webkit-scrollbar-corner {
+  display: block !important;
+  background: #e5e7eb !important;
+}
+
+.architecture-scrollbar::-webkit-scrollbar-track {
+  background: #e5e7eb !important;
+}
+
+.architecture-scrollbar::-webkit-scrollbar-track:horizontal {
+  border-top: 1px dashed #d1d5db;
+}
+
+.architecture-scrollbar::-webkit-scrollbar-track:vertical {
+  border-left: 1px dashed #d1d5db;
+}
+
+.architecture-scrollbar::-webkit-scrollbar-thumb {
+  background: #9ca3af !important;
+  border-radius: 2px;
+  border: 2px solid #e5e7eb;
+  min-width: 24px;
+  min-height: 24px;
+}
+
+.architecture-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #6b7280 !important;
+}
+
+[data-theme="dark"] .architecture-scrollbar::-webkit-scrollbar-corner,
+[data-theme="dark"] .architecture-scrollbar::-webkit-scrollbar-track {
+  background: #171717 !important;
+}
+
+[data-theme="dark"] .architecture-scrollbar::-webkit-scrollbar-track:horizontal {
+  border-top-color: #404040;
+}
+
+[data-theme="dark"] .architecture-scrollbar::-webkit-scrollbar-track:vertical {
+  border-left-color: #404040;
+}
+
+[data-theme="dark"] .architecture-scrollbar::-webkit-scrollbar-thumb {
+  background: #6b7280 !important;
+  border-color: #171717;
+}
+
+[data-theme="dark"] .architecture-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af !important;
+}

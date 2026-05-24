@@ -1,9 +1,9 @@
 "use client"
 
-import { useRouter } from "next/navigation"
-import { ProjectCard } from "@/components/projects/project-card"
+import { ProjectCard } from "@/components/projects/card/project-card"
 import { useProjectSelection } from "@/context/project-selection"
 import { useIsLg } from "@/hooks/use-is-lg"
+import { useRouter } from "next/navigation"
 
 export function ProjectsSection() {
   const router = useRouter()
