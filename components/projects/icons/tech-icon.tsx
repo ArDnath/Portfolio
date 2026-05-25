@@ -22,13 +22,13 @@ export function TechIcon({ slug, size = 14, className = "" }: TechIconProps) {
     )
   }
 
-  const { Icon, initials, hoverClass } = tech
+  const { Icon, initials, colorClass } = tech
 
   if (!Icon && initials) {
     return (
       <span
         aria-hidden
-        className={`inline-flex items-center justify-center rounded-sm border border-dashed border-gray-300 dark:border-gray-600 text-[8px] font-bold leading-none text-gray-400 dark:text-gray-500 transition-colors duration-200 ${hoverClass} ${className}`}
+        className={`inline-flex items-center justify-center rounded-sm border border-dashed border-gray-300 dark:border-gray-600 text-[8px] font-bold leading-none transition-colors duration-200 ${colorClass} ${className}`}
         style={{ width: size + 4, height: size + 4 }}
       >
         {initials}
@@ -42,7 +42,7 @@ export function TechIcon({ slug, size = 14, className = "" }: TechIconProps) {
     <Icon
       size={size}
       aria-hidden
-      className={`flex-shrink-0 text-gray-400 dark:text-gray-500 transition-colors duration-200 ${hoverClass} ${className}`}
+      className={`flex-shrink-0 transition-colors duration-200 ${colorClass} ${className}`}
     />
   )
 }

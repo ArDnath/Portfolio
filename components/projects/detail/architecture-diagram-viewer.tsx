@@ -147,9 +147,11 @@ export function ArchitectureDiagramViewer({
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={imagekitUrl(src)}
+            src={imagekitUrl(src, { width: 1400, quality: 85, format: "auto" })}
             alt={alt}
             draggable={false}
+            loading="lazy"
+            decoding="async"
             className="block w-full h-auto max-w-none opacity-90 group-hover:opacity-100 transition-opacity select-none"
           />
         </div>

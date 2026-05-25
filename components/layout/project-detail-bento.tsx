@@ -1,6 +1,5 @@
 "use client"
 
-import { ImageKitMedia } from "@/components/media/imagekit-media"
 import {
   ArchitectureDiagramViewer,
   TechChip,
@@ -8,14 +7,23 @@ import {
 } from "@/components/projects"
 import { useProjectSelection } from "@/context/project-selection"
 import type { Project } from "@/data/projects"
-import { VT323 } from "next/font/google"
+import dynamic from "next/dynamic"
 
-const vt323 = VT323({ weight: "400", subsets: ["latin"] })
+const VideoDemoPlayer = dynamic(
+  () =>
+    import("@/components/media/video-demo-player").then((m) => m.VideoDemoPlayer),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="absolute inset-0 bg-black/10 dark:bg-white/5 animate-pulse" />
+    ),
+  },
+)
 
 function EmptyState() {
   return (
     <div className="h-full min-h-[320px] flex flex-col items-center justify-center gap-3 p-8 font-mono border border-dashed border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-black">
-      <span className={`${vt323.className} text-[22px] text-gray-300 dark:text-gray-700 tracking-wider`}>
+      <span className="font-sans text-[22px] text-gray-300 dark:text-gray-700 tracking-wider">
         SELECT_A_PROJECT
       </span>
       <p className="text-[11px] text-gray-500 dark:text-gray-400 text-center max-w-xs leading-relaxed">
@@ -60,7 +68,7 @@ export function ProjectDetailBento({
           Project / Detail
         </span>
         <h2
-          className={`${vt323.className} text-[clamp(22px,3vw,36px)] text-black dark:text-white leading-none tracking-wide`}
+          className="font-sans text-[clamp(22px,3vw,36px)] text-black dark:text-white leading-none tracking-wide"
         >
           {selectedProject.name}
         </h2>
@@ -120,17 +128,11 @@ export function ProjectDetailBento({
               isPage ? "min-h-[200px]" : "min-h-0"
             }`}
           >
-            <ImageKitMedia
-              src={detail.videoDemo.src}
+            <VideoDemoPlayer
+              key={selectedProject.id}
+              youtubeId={detail.videoDemo.youtubeId}
               alt={detail.videoDemo.alt}
-              type="video"
               fill
-              className="object-cover pointer-events-none"
-              controls={false}
-              autoPlay
-              muted
-              loop
-              playsInline
             />
           </div>
         </div>

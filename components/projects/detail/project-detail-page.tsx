@@ -7,7 +7,7 @@ import type { Project } from "@/data/projects"
 
 export function ProjectDetailPage({ project }: { project: Project }) {
   return (
-    <div className="min-h-screen bg-background text-foreground font-mono">
+    <div className="min-h-[calc(100vh-2rem)] pb-8 bg-background text-foreground font-mono">
       <header className="sticky top-0 z-20 border-b border-dashed border-gray-300 dark:border-gray-700 bg-white/95 dark:bg-black/95 backdrop-blur-sm px-4 py-3">
         <Link
           href="/"

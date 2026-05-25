@@ -23,7 +23,7 @@ const ProjectSelectionContext = createContext<ProjectSelectionContextValue | nul
 
 export function ProjectSelectionProvider({ children }: { children: ReactNode }) {
   const [selectedId, setSelectedId] = useState<string | null>(
-    projects[0]?.id ?? null
+    projects[0]?.id ?? null,
   )
 
   const selectProject = useCallback((id: string) => {

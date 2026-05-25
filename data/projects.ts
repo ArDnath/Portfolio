@@ -7,6 +7,7 @@ import { IMAGEKIT_PATHS } from "@/lib/imagekit"
  * Detail fields (right grid bento): architectureDiagram, decisions, videoDemo
  *
  * Media paths are ImageKit library paths under `public/` (see lib/imagekit.ts).
+ * Video demos use YouTube IDs in `detail.videoDemo`.
  * Requires NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT in .env.
  */
 
@@ -26,17 +27,24 @@ export interface ProjectMedia {
   type?: "image" | "video"
 }
 
+export interface ProjectVideoDemo {
+  /** YouTube video ID (privacy-enhanced embed, no visible player chrome) */
+  youtubeId: string
+  alt: string
+}
+
 export interface Project {
   id: string
   name: string
   liveUrl: string
+  githubUrl: string
   description: string
   technologies: string[]
   thumbnail: ProjectMedia
   detail: {
     architectureDiagram: ProjectMedia
     decisions: ProjectDecision[]
-    videoDemo: ProjectMedia
+    videoDemo: ProjectVideoDemo
   }
 }
 
@@ -45,6 +53,7 @@ export const projects: Project[] = [
     id: "animap",
     name: "AniMap",
     liveUrl: "https://animap.aryamn.space",
+    githubUrl: "https://github.com/ArDnath/AniMap",
     description:
       "Anime discovery platform with map-based browsing, rich metadata, and fast search across titles and studios.",
     technologies: [
@@ -102,9 +111,8 @@ export const projects: Project[] = [
         },
       ],
       videoDemo: {
-        src: "portfolio/animap/demo.mp4",
+        youtubeId: "JczuByIPFTY",
         alt: "AniMap product demo",
-        type: "video",
       },
     },
   },
@@ -112,6 +120,7 @@ export const projects: Project[] = [
     id: "tubebrief",
     name: "TubeBrief",
     liveUrl: "https://tubebrief.aryamn.space",
+    githubUrl: "https://github.com/ArDnath/TubeBrief",
     description:
       "YouTube video summarizer that turns long-form content into concise, skimmable briefs with key takeaways.",
     technologies: ["nextjs", "tailwindcss", "bun", "cloudflare", "hono"],
@@ -162,9 +171,8 @@ export const projects: Project[] = [
         },
       ],
       videoDemo: {
-        src: "portfolio/tubebrief/demo.mp4",
+        youtubeId: "mZ8uS1Q7rsk",
         alt: "TubeBrief product demo",
-        type: "video",
       },
     },
   },
@@ -172,6 +180,7 @@ export const projects: Project[] = [
     id: "cashlatics",
     name: "Cashlatics",
     liveUrl: "https://cashlatics.aryamn.space",
+    githubUrl: "https://github.com/ArDnath/cashlatics",
     description:
       "Personal finance tracker with dashboards, category insights, and secure multi-account aggregation.",
     technologies: [
@@ -239,9 +248,8 @@ export const projects: Project[] = [
         },
       ],
       videoDemo: {
-        src: "portfolio/cashlatics/demo.mp4",
+        youtubeId: "Xw0_Ex3Uc8E",
         alt: "Cashlatics product demo",
-        type: "video",
       },
     },
   },

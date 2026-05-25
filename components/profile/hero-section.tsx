@@ -2,15 +2,12 @@ import Image from "next/image"
 import ThemeToggle from "@/components/theme-toggle"
 import { IMAGEKIT_PATHS, imagekitUrl } from "@/lib/imagekit"
 import Link from "next/link"
-import { VT323 } from "next/font/google"
 import { SiGithub, SiX, SiGmail } from "react-icons/si"
 
-const vt323 = VT323({ weight: "400", subsets: ["latin"] })
-
 const socialLinks = [
-  { href: "https://github.com/ArDnath", label: "GitHub", Icon: SiGithub },
-  { href: "https://x.com/AriyamanDe12_24", label: "Twitter", Icon: SiX },
-  { href: "mailto:debnathariyaman1224@gmail.com", label: "Email", Icon: SiGmail },
+  { href: "https://github.com/ArDnath", label: "GitHub", Icon: SiGithub, color: "text-[#181717] dark:text-white" },
+  { href: "https://x.com/AriyamanDe12_24", label: "Twitter", Icon: SiX, color: "text-black dark:text-white" },
+  { href: "mailto:debnathariyaman1224@gmail.com", label: "Email", Icon: SiGmail, color: "text-[#EA4335]" },
 ] as const
 
 export default function HeroSection() {
@@ -60,7 +57,7 @@ export default function HeroSection() {
         {/* Left */}
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline gap-0 mb-2">
-            <h1 className={`${vt323.className} text-[clamp(32px,5vw,54px)] text-black dark:text-white leading-none tracking-wide`}>
+            <h1 className="font-sans text-[clamp(32px,5vw,54px)] text-black dark:text-white leading-none tracking-wide">
               Ariyaman Debnath
             </h1>
           </div>
@@ -68,7 +65,7 @@ export default function HeroSection() {
           <div className="flex items-center gap-2 mb-5">
         
             <p className="text-[9px] tracking-[.18em] uppercase text-gray-400 dark:text-gray-300 whitespace-nowrap">
-              <span className={`${vt323.className} text-[14px] tracking-wider text-black dark:text-white`}>
+              <span className="font-sans text-[14px] tracking-wider text-black dark:text-white">
                 Future-Ready
               </span>{" "}
               Full‑Stack Engineer tending to Devops
@@ -118,17 +115,22 @@ export default function HeroSection() {
       </div>
 
       {/* Bottom links — icons */}
-      <div className="relative  pt-2 border-gray-400 dark:border-gray-800  z-10 flex items-center gap-5">
-        {socialLinks.map(({ href, label, Icon }) => (
+      <div className="relative pt-2 border-gray-400 dark:border-gray-800 z-10 flex items-center gap-5">
+        {socialLinks.map(({ href, label, Icon, color }) => (
           <Link
             key={label}
             href={href}
             target={href.startsWith("mailto:") ? undefined : "_blank"}
             rel={href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
             aria-label={label}
-            className="inline-flex items-center justify-center w-9 h-9 border border-dashed border-gray-300 dark:border-gray-700 rounded-md text-gray-400 dark:text-gray-600 hover:text-black dark:hover:text-white hover:border-black dark:hover:border-white hover:border-solid transition-all duration-150"
+            className="group flex items-center gap-0 overflow-hidden border border-dashed border-gray-300 dark:border-gray-700 rounded-md hover:border-black dark:hover:border-white hover:border-solid transition-all duration-300"
           >
-            <Icon size={12} aria-hidden className="shrink-0" />
+            <div className={`flex items-center justify-center w-9 h-9 shrink-0 ${color}`}>
+              <Icon size={12} aria-hidden />
+            </div>
+            <span className="text-[10px] uppercase tracking-wider font-semibold max-w-0 opacity-0 group-hover:max-w-[80px] group-hover:opacity-100 group-hover:pr-3 transition-all duration-300 whitespace-nowrap text-black dark:text-white">
+              {label}
+            </span>
           </Link>
         ))}
       </div>

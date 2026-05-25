@@ -16,10 +16,12 @@ export function TechChip({ slug, onClick }: TechChipProps) {
       role="listitem"
       title={label}
       onClick={onClick}
-      className="group/chip inline-flex items-center gap-1.5 h-6 pl-1.5 pr-2 border border-dashed border-gray-300 dark:border-gray-700 rounded-md text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:border-black dark:hover:border-white hover:border-solid hover:bg-gray-50 dark:hover:bg-white/5 transition-all duration-200 cursor-default"
+      className="group/chip inline-flex items-center gap-0 overflow-hidden h-6 px-1.5 border border-dashed border-gray-300 dark:border-gray-700 rounded-md text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:border-black dark:hover:border-white hover:border-solid hover:bg-gray-50 dark:hover:bg-white/5 transition-all duration-300 cursor-default"
     >
-      <TechIcon slug={slug} size={13} />
-      <span className="text-[9px] tracking-[.08em] uppercase leading-none">
+      <div className="flex items-center justify-center shrink-0">
+        <TechIcon slug={slug} size={13} />
+      </div>
+      <span className="text-[9px] tracking-[.08em] uppercase leading-none max-w-0 opacity-0 group-hover/chip:max-w-[100px] group-hover/chip:opacity-100 group-hover/chip:pl-1.5 transition-all duration-300 whitespace-nowrap overflow-hidden">
         {label}
       </span>
     </span>
