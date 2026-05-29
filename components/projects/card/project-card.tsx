@@ -1,25 +1,24 @@
 "use client"
 
+import { ImageKitImage } from "@/components/media/imagekit-image"
 import { TechChip } from "@/components/projects/icons"
 import type { Project } from "@/data/projects"
-import { imagekitUrl } from "@/lib/imagekit"
 import { ArrowUpRight } from "lucide-react"
-import Image from "next/image"
 import { SiGithub } from "react-icons/si"
 
 interface ProjectCardProps {
   project: Project
   selected?: boolean
+  priority?: boolean
   onSelect: () => void
 }
 
-export function ProjectCard({ project, selected, onSelect }: ProjectCardProps) {
-  const thumbnailUrl = imagekitUrl(project.thumbnail.src, {
-    width: 480,
-    quality: 75,
-    format: "auto",
-  })
-
+export function ProjectCard({
+  project,
+  selected,
+  priority = false,
+  onSelect,
+}: ProjectCardProps) {
   return (
     <div
       role="button"
@@ -44,13 +43,14 @@ export function ProjectCard({ project, selected, onSelect }: ProjectCardProps) {
       />
 
       <div className="relative w-full h-[120px] overflow-hidden border-b border-dashed border-gray-300 dark:border-gray-700 group-hover:border-gray-400 dark:group-hover:border-gray-600 transition-colors duration-200">
-        <Image
-          src={thumbnailUrl}
+        <ImageKitImage
+          src={project.thumbnail.src}
           alt={project.thumbnail.alt}
           width={600}
           height={240}
+          transform={{ width: 480, quality: 75, format: "auto" }}
+          priority={priority}
           sizes="(max-width: 640px) 100vw, 300px"
-          loading="lazy"
           className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-[1.04] transition-all duration-500 ease-out"
         />
         <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-white dark:from-black to-transparent" />

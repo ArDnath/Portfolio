@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "*.aryamn.space",
+        hostname: "*.ariyaman.in",
         pathname: "/**",
       },
       {

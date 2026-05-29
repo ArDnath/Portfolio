@@ -1,6 +1,5 @@
-import Image from "next/image"
 import ThemeToggle from "@/components/theme-toggle"
-import { IMAGEKIT_PATHS, imagekitUrl } from "@/lib/imagekit"
+import { HeroLogo } from "@/components/profile/hero-logo"
 import Link from "next/link"
 import { SiGithub, SiX, SiGmail } from "react-icons/si"
 
@@ -100,14 +99,7 @@ export default function HeroSection() {
           <div className="group relative cursor-pointer">
             <div className="absolute inset-0 border p-2 rounded-sm bg-black/10 blur-2xl translate-y-4 scale-95 dark:bg-black/30" />
             <div className="relative overflow-hidden  border-slate-800 dark:border-slate-300  shadow-[10px_6.5px_10px_4px_rgba(0,0,0,0.3)] dark:shadow-[10px_6.5px_10px_0_rgba(255,255,255,0.2)] transition-shadow duration-300 group-hover:shadow-[0_0_0_0_rgba(0,0,0,0)]">
-              <Image
-                src={imagekitUrl(IMAGEKIT_PATHS.logo, { width: 400, quality: 90, format: "auto" })}
-                alt="Ariyaman Debnath"
-                width={80}
-                height={80}
-                priority
-                className="relative z-[1] w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 object-cover border-2 border-slate-800 dark:border-slate-300"
-              />
+              <HeroLogo />
             </div>
           </div>
         </div>

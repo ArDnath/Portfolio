@@ -52,7 +52,7 @@ export const projects: Project[] = [
   {
     id: "animap",
     name: "AniMap",
-    liveUrl: "https://animap.aryamn.space",
+    liveUrl: "https://animap.ariyaman.in",
     githubUrl: "https://github.com/ArDnath/AniMap",
     description:
       "Anime discovery platform with map-based browsing, rich metadata, and fast search across titles and studios.",
@@ -119,7 +119,7 @@ export const projects: Project[] = [
   {
     id: "tubebrief",
     name: "TubeBrief",
-    liveUrl: "https://tubebrief.aryamn.space",
+    liveUrl: "https://tubebrief.ariyaman.in",
     githubUrl: "https://github.com/ArDnath/TubeBrief",
     description:
       "YouTube video summarizer that turns long-form content into concise, skimmable briefs with key takeaways.",
@@ -179,7 +179,7 @@ export const projects: Project[] = [
   {
     id: "cashlatics",
     name: "Cashlatics",
-    liveUrl: "https://cashlatics.aryamn.space",
+    liveUrl: "https://cashlatics.ariyaman.in",
     githubUrl: "https://github.com/ArDnath/cashlatics",
     description:
       "Personal finance tracker with dashboards, category insights, and secure multi-account aggregation.",

@@ -1,6 +1,6 @@
 "use client"
 
-import { imagekitUrl } from "@/lib/imagekit"
+import { ImageKitImage } from "@/components/media/imagekit-image"
 import { Minus, Plus, RotateCcw } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
 
@@ -145,13 +145,13 @@ export function ArchitectureDiagramViewer({
             width: contentWidth ?? `${scale * 100}%`,
           }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={imagekitUrl(src, { width: 1400, quality: 85, format: "auto" })}
+          <ImageKitImage
+            src={src}
             alt={alt}
+            width={1400}
+            height={900}
+            transform={{ width: 1400, quality: 85, format: "auto" }}
             draggable={false}
-            loading="lazy"
-            decoding="async"
             className="block w-full h-auto max-w-none opacity-90 group-hover:opacity-100 transition-opacity select-none"
           />
         </div>

@@ -1,3 +1,5 @@
+import type { Transformation } from "@imagekit/next"
+
 export type ImageKitTransform = {
   width?: number
   height?: number
@@ -20,17 +22,7 @@ export const IMAGEKIT_PATHS = {
   },
 } as const
 
-function buildTransformSegment(transform?: ImageKitTransform): string {
-  if (!transform) return ""
-
-  const parts: string[] = []
-  if (transform.width) parts.push(`w-${transform.width}`)
-  if (transform.height) parts.push(`h-${transform.height}`)
-  if (transform.quality) parts.push(`q-${transform.quality}`)
-  if (transform.format) parts.push(`f-${transform.format}`)
-
-  return parts.length > 0 ? `tr:${parts.join(",")}/` : ""
-}
+export const IMAGEKIT_TRANSFORMATION_POSITION = "path" as const
 
 export function getImageKitEndpoint(): string {
   const endpoint = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT?.trim()
@@ -42,20 +34,19 @@ export function getImageKitEndpoint(): string {
   return endpoint.replace(/\/$/, "")
 }
 
-/**
- * Builds an ImageKit delivery URL from a library path (e.g. `public/projects/animap.png`).
- * Absolute https URLs are returned unchanged.
- */
-export function imagekitUrl(path: string, transform?: ImageKitTransform): string {
-  if (path.startsWith("http://") || path.startsWith("https://")) {
-    return path
-  }
+/** Maps portfolio transform options to ImageKit SDK transformation objects. */
+export function toImageKitTransformation(
+  transform?: ImageKitTransform,
+): Transformation[] {
+  if (!transform) return []
 
-  const base = getImageKitEndpoint()
-  const cleanPath = path.replace(/^\//, "")
-  const tr = buildTransformSegment(transform)
+  const entry: Transformation = {}
+  if (transform.width != null) entry.width = transform.width
+  if (transform.height != null) entry.height = transform.height
+  if (transform.quality != null) entry.quality = transform.quality
+  if (transform.format != null) entry.format = transform.format
 
-  return `${base}/${tr}${cleanPath}`
+  return Object.keys(entry).length > 0 ? [entry] : []
 }
 
 export function isImageKitPath(path: string): boolean {

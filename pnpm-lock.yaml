@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@imagekit/javascript':
+        specifier: ^5.4.0
+        version: 5.4.0
       '@imagekit/next':
         specifier: ^2.1.5
         version: 2.1.5(next@16.2.6(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))
