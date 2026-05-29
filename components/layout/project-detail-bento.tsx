@@ -8,6 +8,7 @@ import {
 import { useProjectSelection } from "@/context/project-selection"
 import type { Project } from "@/data/projects"
 import dynamic from "next/dynamic"
+import { useEffect } from "react"
 
 const VideoDemoPlayer = dynamic(
   () =>
@@ -43,8 +44,18 @@ export function ProjectDetailBento({
   project: projectProp,
   variant = "panel",
 }: ProjectDetailBentoProps) {
-  const { selectedProject: contextProject } = useProjectSelection()
+  const { selectedProject: contextProject, clearSelection } = useProjectSelection()
   const selectedProject = projectProp ?? contextProject
+
+  // Esc key closes the detail panel (only when used as a panel, not a dedicated page)
+  useEffect(() => {
+    if (variant !== "panel") return
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") clearSelection()
+    }
+    window.addEventListener("keydown", handler)
+    return () => window.removeEventListener("keydown", handler)
+  }, [variant, clearSelection])
 
   if (!selectedProject) {
     return <EmptyState />

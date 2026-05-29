@@ -14,6 +14,7 @@ interface ProjectSelectionContextValue {
   selectedId: string | null
   selectedProject: Project | null
   selectProject: (id: string) => void
+  clearSelection: () => void
   projects: Project[]
 }
 
@@ -30,14 +31,19 @@ export function ProjectSelectionProvider({ children }: { children: ReactNode }) 
     setSelectedId(id)
   }, [])
 
+  const clearSelection = useCallback(() => {
+    setSelectedId(null)
+  }, [])
+
   const value = useMemo(
     () => ({
       selectedId,
       selectedProject: selectedId ? getProjectById(selectedId) ?? null : null,
       selectProject,
+      clearSelection,
       projects,
     }),
-    [selectedId, selectProject]
+    [selectedId, selectProject, clearSelection]
   )
 
   return (

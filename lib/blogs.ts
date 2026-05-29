@@ -4,78 +4,51 @@ export interface BlogPost {
   description: string
   date: string
   tags: string[]
+  image_url: string
   content: string
-  imageUrl: string
   url: string
 }
 
-function parseFrontmatter(fileContent: string) {
-  const frontmatterRegex = /^---\r?\n([\s\S]*?)\r?\n---/
-  const match = fileContent.match(frontmatterRegex)
-  
-  const metadata: Record<string, string> = {}
-  let content = fileContent
-  
-  if (match) {
-    const rawFrontmatter = match[1]
-    content = fileContent.replace(match[0], "").trim()
-    
-    const lines = rawFrontmatter.split("\n")
-    for (const line of lines) {
-      const parts = line.split(":")
-      if (parts.length >= 2) {
-        const key = parts[0].trim()
-        const value = parts.slice(1).join(":").trim()
-        metadata[key] = value.replace(/^["']|["']$/g, "")
+export async function getLocalBlogs(): Promise<BlogPost[]> {
+  const fs = require("fs")
+  const path = require("path")
+
+  const blogsDirectory = path.join(process.cwd(), "content/blogs")
+  if (!fs.existsSync(blogsDirectory)) return []
+
+  const filenames = fs.readdirSync(blogsDirectory)
+  const posts: BlogPost[] = []
+
+  for (const filename of filenames) {
+    if (filename.endsWith(".mdx") || filename.endsWith(".md")) {
+      const slug = filename.replace(/\.mdx?$/, "")
+      try {
+        const mod = await import(`@/content/blogs/${slug}.mdx`)
+        const meta = mod.metadata || {}
+        posts.push({
+          slug,
+          title: meta.title || "Untitled",
+          description: meta.description || "",
+          date: meta.date || "",
+          tags: meta.tags || [],
+          image_url: meta.image_url || "",
+          content: "",
+          url: `/blogs/${slug}`,
+        })
+      } catch (err) {
+        console.error(`Failed to dynamically import blog metadata for ${slug}:`, err)
       }
     }
   }
-  
-  return { metadata, content }
+
+  return posts.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  )
 }
 
-export async function getLocalBlogs(): Promise<BlogPost[]> {
-  // Use require for server-only modules so that Next.js bundler does not include them in the client bundle
-  const fs = require("fs")
-  const path = require("path")
-  
-  const blogsDirectory = path.join(process.cwd(), "content/blogs")
-  if (!fs.existsSync(blogsDirectory)) {
-    return []
-  }
-  
-  const filenames = fs.readdirSync(blogsDirectory)
-  const posts = filenames
-    .filter((filename: string) => filename.endsWith(".mdx") || filename.endsWith(".md"))
-    .map((filename: string) => {
-      const slug = filename.replace(/\.mdx?$/, "")
-      const filePath = path.join(blogsDirectory, filename)
-      const fileContent = fs.readFileSync(filePath, "utf-8")
-      
-      const { metadata, content } = parseFrontmatter(fileContent)
-      
-      let tags: string[] = []
-      if (metadata.tags) {
-        const cleaned = metadata.tags.replace(/[\[\]]/g, "")
-        tags = cleaned.split(",").map((t: string) => t.trim().replace(/^["']|["']$/g, ""))
-      }
-      
-      return {
-        slug,
-        title: metadata.title || "Untitled",
-        description: metadata.description || "",
-        date: metadata.date || "",
-        tags,
-        content,
-        imageUrl: metadata.imageUrl || "",
-        url: `/blogs/${slug}`
-      }
-    })
-    
-  return posts.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())
-}
-
-export async function getBlogBySlug(slug: string): Promise<BlogPost | undefined> {
+export async function getBlogBySlug(
+  slug: string,
+): Promise<BlogPost | undefined> {
   const posts = await getLocalBlogs()
   return posts.find((p) => p.slug === slug)
 }
@@ -83,10 +56,8 @@ export async function getBlogBySlug(slug: string): Promise<BlogPost | undefined>
 export async function fetchBlogPosts(): Promise<BlogPost[]> {
   try {
     return await getLocalBlogs()
-  } catch (error) {
-    console.error("Error loading local blog posts:", error)
+  } catch (err) {
+    console.error("Error loading local blog posts:", err)
     return []
   }
 }
-
-export const BLOGS_BASE_URL = ""

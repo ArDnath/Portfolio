@@ -1,27 +1,31 @@
----
-title: "Arch Linux + Hyprland + LazyVim: The Ultimate Developer Setup"
-description: "A comprehensive guide to building a minimal, lightning-fast tiling window manager environment with a modern, customized Neovim configuration."
-date: "May 25, 2026"
-tags: ["arch", "hyprland", "lazyvim", "linux"]
-imageUrl: ""
----
+export const metadata = {
+  title: "Arch Linux + Hyprland + LazyVim: The Ultimate Developer Setup",
+  description:
+    "A comprehensive guide to building a minimal, lightning-fast tiling window manager environment with a modern, customized Neovim configuration.",
+  date: "May 25, 2026",
+  tags: ["arch", "hyprland", "lazyvim", "linux"],
+  image_url: "", // ← Paste your ImageKit URL here to show a cover image
+}
 
-Welcome to the ultimate setup. If you are a developer looking for maximum efficiency, minimum keyboard-to-screen latency, and a beautiful, minimalist workspace that runs on less than 800MB of RAM, you are in the right place. 
+Welcome to the ultimate setup. If you are a developer looking for maximum efficiency, minimum keyboard-to-screen latency, and a beautiful, minimalist workspace that runs on less than 800MB of RAM, you are in the right place.
 
 This guide details how to build a dynamic tiling window manager workspace on **Arch Linux** using **Hyprland** (Wayland) and **LazyVim** (Neovim) from scratch.
 
 ---
 
 ## 1. The Core Philosophy
-Traditional desktop environments (Gnome, KDE) are bloated, heavy, and encourage mouse usage. A tiling window manager solves this by:
-- Automatically arranging windows in a grid without overlaps.
-- Keeping your hands on the home row of the keyboard at all times.
-- Offloading rendering to the GPU for smooth 120Hz+ animations (thanks to Hyprland's custom renderer).
+
+Traditional desktop environments (GNOME, KDE) are bloated, heavy, and encourage mouse usage. A tiling window manager solves this by:
+
+- Automatically arranging windows in a grid without overlaps
+- Keeping your hands on the home row of the keyboard at all times
+- Offloading rendering to the GPU for smooth 120Hz+ animations (thanks to Hyprland's custom compositor)
 
 ---
 
 ## 2. Base Arch Linux Installation
-Start with a clean Arch Linux installation. We highly recommend using the standard `archinstall` script if you want a quick base system, but choose **no desktop environment**—we will install our own display server and window compositor.
+
+Start with a clean Arch Linux installation. Use the standard `archinstall` script for a quick base, but choose **no desktop environment** — we will install our own display server and compositor.
 
 Once your base system is up, install the necessary dependencies:
 
@@ -30,20 +34,22 @@ Once your base system is up, install the necessary dependencies:
 sudo pacman -Syu
 
 # Install essential Wayland and Hyprland packages
-sudo pacman -S hyprland waybar rofi-lbonn-wayland-git kitty lightdm dunst wl-clipboard
+sudo pacman -S hyprland waybar rofi-lbonn-wayland-git kitty dunst wl-clipboard
 ```
 
-### Essential Hyprland Helpers:
-- **kitty**: A fast, GPU-accelerated terminal emulator.
-- **waybar**: Highly customizable top status bar.
-- **rofi**: Application launcher and command menu.
-- **dunst**: Lightweight notification daemon.
-- **wl-clipboard**: System clipboard integration for Wayland.
+### Essential Hyprland Helpers
+
+- **kitty** — fast, GPU-accelerated terminal emulator
+- **waybar** — highly customizable top status bar
+- **rofi** — application launcher and command menu
+- **dunst** — lightweight notification daemon
+- **wl-clipboard** — system clipboard integration for Wayland
 
 ---
 
 ## 3. Configuring Hyprland
-Create the configuration file at `~/.config/hypr/hyprland.conf`. Hyprland has an intuitive config system. Here is a production-ready snippet:
+
+Create the configuration file at `~/.config/hypr/hyprland.conf`. Hyprland has an intuitive, declarative config system. Here is a production-ready snippet:
 
 ```ini
 # Monitor Configuration
@@ -53,7 +59,7 @@ monitor=,preferred,auto,1
 input {
     kb_layout = us
     follow_mouse = 1
-    sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
+    sensitivity = 0
 }
 
 # Layout and Aesthetics
@@ -66,28 +72,22 @@ general {
     layout = dwindle
 }
 
-# Animations (Butter smooth 60/120fps)
+# Butter-smooth animations
 animations {
     enabled = yes
     bezier = myBezier, 0.05, 0.9, 0.1, 1.05
     animation = windows, 1, 7, myBezier
-    animation = windowsOut, 1, 7, default, popyellow 80%
     animation = border, 1, 10, default
     animation = fade, 1, 7, default
     animation = workspaces, 1, 6, default
 }
 
-# Keybindings (Vim-inspired)
+# Vim-inspired keybindings
 $mainMod = SUPER
 
 bind = $mainMod, Q, exec, kitty
-bind = $mainMod, C, killactive, 
-bind = $mainMod, M, exit, 
-bind = $mainMod, E, exec, dolphin
-bind = $mainMod, V, togglefloating, 
+bind = $mainMod, C, killactive
 bind = $mainMod, R, exec, rofi -show drun
-
-# Window Focus
 bind = $mainMod, H, movefocus, l
 bind = $mainMod, L, movefocus, r
 bind = $mainMod, K, movefocus, u
@@ -97,25 +97,24 @@ bind = $mainMod, J, movefocus, d
 ---
 
 ## 4. Setting up LazyVim (Neovim)
-Neovim is the ultimate IDE. Rather than maintaining a complex 2,000-line custom config, we use **LazyVim**—a modern starter template managed by `lazy.nvim` that provides clean defaults, structural organization, and instant startup times.
+
+Neovim is the ultimate editor. Rather than maintaining a complex 2,000-line custom config, we use **LazyVim** — a modern starter template managed by `lazy.nvim` that provides clean defaults, structural organization, and instant startup times.
 
 ### Installation
-First, clear any old Neovim files and install the pre-requisites:
 
 ```bash
-# Back up existing configurations
+# Back up existing config
 mv ~/.config/nvim ~/.config/nvim.bak
 mv ~/.local/share/nvim ~/.local/share/nvim.bak
 
-# Clone LazyVim starter template
+# Clone the LazyVim starter template
 git clone https://github.com/LazyVim/starter ~/.config/nvim
-
-# Remove git history to make it your own config
 rm -rf ~/.config/nvim/.git
 ```
 
-### Structuring Plugins
-Inside `~/.config/nvim/lua/plugins/`, you can add your custom plugins. For example, to set up Copilot, write `~/.config/nvim/lua/plugins/copilot.lua`:
+### Adding Plugins
+
+Inside `~/.config/nvim/lua/plugins/`, drop any `.lua` file to register new plugins. Example — GitHub Copilot:
 
 ```lua
 return {
@@ -128,9 +127,7 @@ return {
         suggestion = {
           enabled = true,
           auto_trigger = true,
-          keymap = {
-            accept = "<M-l>",
-          },
+          keymap = { accept = "<M-l>" },
         },
       })
     end,
@@ -138,14 +135,16 @@ return {
 }
 ```
 
-Now, launch Neovim using `nvim`. LazyVim will automatically install Mason, LSP servers, Treesitter grammars, and your styled Neovim UI.
+Launch `nvim` and LazyVim will auto-install Mason, LSP servers, and Treesitter grammars on first run.
 
 ---
 
-## 5. Visual Summary
-This trio transforms your developer workflow:
-1. **Arch Linux** keeps your core operating system lean, secure, and up-to-date.
-2. **Hyprland** ensures window operations, transitions, and workspaces are completely GPU-driven.
-3. **LazyVim** elevates editing to terminal speed, bypassing clunky mouse interfaces completely.
+## 5. Summary
+
+This trio transforms your developer workflow entirely:
+
+1. **Arch Linux** — lean, secure, rolling-release base
+2. **Hyprland** — GPU-driven Wayland compositor with buttery animations
+3. **LazyVim** — structured Neovim config at terminal speed
 
 Enjoy the sheer speed and minimalism of your new workstation!

@@ -1,29 +1,32 @@
+export const metadata = {
+  title: "Zero-Config Docker Deployments on Railway",
+  description:
+    "An engineering review of Railway.app for deploying containerized backends, microservices, and databases with seamless Git-ops and no cluster management.",
+  date: "May 30, 2026",
+  tags: ["docker", "deployment", "railway", "devops"],
+  image_url: "", // ← Paste your ImageKit URL here to show a cover image
+}
+
+For years developers relied on Heroku for quick backend deployments. With its shift to fully paid plans, a massive gap opened in the PaaS market.
+
+Raw VPS providers like DigitalOcean or Hetzner are cheap, but managing Linux configs, firewall rules, SSL renewals, and Docker networking is a real time sink.
+
+**Railway.app** fills this gap — deploy backend services and databases with the ease of Vercel but the flexibility of Docker containerization.
+
 ---
-title: "Zero-Config Docker Deployments: Shifting from PaaS to Railway"
-description: "An engineering review of Railway.app for deploying containerized backends, microservices, and databases with seamless Git-ops."
-date: "May 30, 2026"
-tags: ["docker", "deployment", "railway", "devops"]
-imageUrl: ""
----
 
-For years, developers relied on Heroku for quick backend deployments. However, with its transition to fully paid plans and outdated infrastructure, a massive gap opened in the PaaS (Platform-as-a-Service) market.
+## 1. Why Docker is the Golden Standard
 
-While raw virtual private servers (VPS) like DigitalOcean or Hetzner are cheap, managing Linux configurations, firewall tables, SSL renewals, and Docker networking is a massive time sink.
+Deploying raw code on a host machine is fragile. Minor environment differences between your laptop and the server cause mysterious crashes.
 
-Enter **Railway.app**—a cloud platform designed to let you deploy backend databases, microservices, and containerized APIs with the ease of Vercel but the flexibility of bare Docker containerization.
+A **Docker image** bundles the OS, runtime, dependencies, environment, and code into a single immutable artifact.
 
----
-
-## 1. Why Docker Containers are the Golden Standard
-Deploying raw code (like setting up node versions or python paths on a host machine) is fragile. Minor environmental differences between your computer and the server can crash the build.
-
-By wrapping your application in a **Docker image**, you bundle the OS, the runtime, dependencies, environment, and code into a single immutable artifact. 
 > "If it runs on your machine, it runs in production."
 
-Here is an optimized, multi-stage production `Dockerfile` for a Node.js/TypeScript backend:
+Multi-stage production `Dockerfile` for a Node.js/TypeScript backend:
 
 ```dockerfile
-# Stage 1: Build the application
+# Stage 1: Build
 FROM node:20-alpine AS builder
 WORKDIR /app
 COPY package*.json pnpm-lock.yaml ./
@@ -31,7 +34,7 @@ RUN npm install -g pnpm && pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm build
 
-# Stage 2: Production-grade lean runner
+# Stage 2: Lean production runner
 FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
@@ -39,7 +42,6 @@ COPY package*.json pnpm-lock.yaml ./
 RUN npm install -g pnpm && pnpm install --frozen-lockfile --prod
 COPY --from=builder /app/dist ./dist
 
-# Run as a non-privileged system user for server security
 USER node
 EXPOSE 8080
 CMD ["node", "dist/index.js"]
@@ -47,36 +49,47 @@ CMD ["node", "dist/index.js"]
 
 ---
 
-## 2. Deploying Containerized Backends to Railway
-Railway excels at picking up your codebase and running it without custom cluster configurations.
+## 2. Deploying to Railway
 
-### The Deployment Process:
-1. **Link GitHub**: Connect your GitHub repository.
-2. **Auto-detection**: If Railway detects a `Dockerfile` in the root of your project, it automatically triggers a Cloud Native build.
-3. **Build & Edge Routing**: Railway spins up a builder container, compiles your Docker layers, pushes the image to a private registry, and boots up a runtime container. It then provisions an edge proxy with an automated Let's Encrypt SSL certificate.
+Railway detects a `Dockerfile` in your repo automatically and handles the rest.
 
-This entire Git-ops cycle is triggered on every `git push`.
+### The Flow
 
----
+1. **Link GitHub** — connect your repository to a Railway project
+2. **Auto-detect** — Railway sees the `Dockerfile` and triggers a cloud-native build
+3. **Build & Route** — it compiles Docker layers, pushes to a private registry, boots the container, and provisions an HTTPS edge proxy with a Let's Encrypt certificate
 
-## 3. Advanced Features for Engineering Teams
-Railway is not just a toy. It includes robust production features:
-
-### Internal Private Networking:
-If you deploy a Postgres database and an Express API, you do not want your database exposed to the public internet. Railway sets up a private IPv6 overlay network. Your API can communicate with the database securely via:
-`postgresql://postgres:${PASSWORD}@postgres.railway.internal:5432`
-
-### Persistent Disks:
-Serverless platforms like AWS Lambda or Vercel are stateless. If you write files to the disk, they vanish on the next request. Railway lets you attach persistent SSD volumes to your Docker containers, perfect for self-hosting CMS sites, search indexes (like Meilisearch), or file buffers.
+Every `git push` triggers a fresh deploy. No YAML pipelines, no cluster configs.
 
 ---
 
-## 4. Cost and Performance vs. Vercel & AWS
-| Feature | Vercel | AWS ECS / Fargate | Railway.app |
+## 3. Production Features
+
+### Internal Private Networking
+
+Railway sets up a private IPv6 overlay network between services. Your API talks to Postgres securely without exposing the database to the public internet:
+
+```bash
+postgresql://postgres:${PASSWORD}@postgres.railway.internal:5432
+```
+
+### Persistent Volumes
+
+Serverless platforms are stateless — files written to disk vanish on the next request. Railway lets you attach persistent SSD volumes to containers, ideal for self-hosting:
+
+- Search indexes (Meilisearch, Typesense)
+- CMS data stores
+- File upload buffers
+
+---
+
+## 4. Cost Comparison
+
+| Feature | Vercel | AWS ECS | Railway |
 | :--- | :--- | :--- | :--- |
-| **Backend Support** | Severless only (short lifecycle) | Full (Docker) | Full (Docker) |
-| **Git-Ops Setup** | Automatic | Complex (CodePipeline/Actions) | Automatic |
-| **Cold Starts** | Yes | No | No |
-| **Starting Cost** | Free / $20 | ~$15/mo base | $5/mo (Developer plan) |
+| Backend Support | Serverless only | Full Docker | Full Docker |
+| Git-Ops | Automatic | Complex | Automatic |
+| Cold Starts | Yes | No | No |
+| Starting Cost | Free / $20 | ~$15/mo | $5/mo |
 
-For teams that want to ship fast without managing Kubernetes clusters, Railway is a highly scalable, robust platform. It bridges the gap between raw infrastructure and developer convenience beautifully.
+Railway bridges the gap between raw infrastructure and developer convenience. For teams that want to ship fast without managing Kubernetes, it is the right tool.

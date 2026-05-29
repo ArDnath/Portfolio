@@ -1,0 +1,143 @@
+export const metadata = {
+  title: "Ncmpcpp: The Ultimate Arch Linux Terminal Audio Player & Visualizer",
+  description:
+    "A complete walk-through to configuring MPD (Music Player Daemon) and ncmpcpp with a real-time audio visualizer on Arch Linux.",
+  date: "May 29, 2026",
+  tags: ["arch", "linux", "audio", "terminal"],
+  image_url: "", // ← Paste your ImageKit URL here to show a cover image
+}
+
+If you spend your day in the terminal, switching to a web browser or a heavy electron app just to play local music is a waste of resources.
+
+**ncmpcpp** (NCurses Music Player Client Plus Plus) combined with **MPD** (Music Player Daemon) is the industry standard for terminal audio. It is lightweight, controllable via keyboard bindings, and features an ultra-smooth ASCII audio visualizer.
+
+---
+
+## 1. The Architecture: MPD + ncmpcpp
+
+Unlike regular media players, this setup splits audio handling into two processes:
+
+- **MPD (Music Player Daemon)** — a background system service that manages your music library, outputs audio, and maintains playback states.
+- **ncmpcpp** — the terminal user interface client that connects to MPD and lets you browse, queue, and control playback.
+
+This means you can close the terminal or log out, and your music keeps playing uninterrupted in the background.
+
+---
+
+## 2. Installation
+
+On Arch Linux, install the packages along with `mpc` (a simple CLI helper for controlling MPD from scripts):
+
+```bash
+sudo pacman -S mpd ncmpcpp mpc
+```
+
+---
+
+## 3. Configuring MPD
+
+Create the configuration directories and files in your user home config:
+
+```bash
+mkdir -p ~/.config/mpd/playlists
+touch ~/.config/mpd/{mpd.conf,mpd.db,mpd.log,mpdstate,mpd.pid}
+```
+
+Now open `~/.config/mpd/mpd.conf` and populate it:
+
+```ini
+# Files and directories
+music_directory    "~/Music"
+playlist_directory "~/.config/mpd/playlists"
+db_file            "~/.config/mpd/mpd.db"
+log_file           "~/.config/mpd/mpd.log"
+pid_file           "~/.config/mpd/mpd.pid"
+state_file         "~/.config/mpd/mpdstate"
+
+# Network
+bind_to_address    "127.0.0.1"
+port               "6600"
+restore_paused     "yes"
+
+# Audio Output (using PipeWire/PulseAudio)
+audio_output {
+    type            "pulse"
+    name            "Pulse Output"
+}
+
+# Visualizer Output (Required for ncmpcpp visualizer)
+audio_output {
+    type            "fifo"
+    name            "Visualizer Feed"
+    path            "/tmp/mpd.fifo"
+    format          "44100:16:2"
+}
+```
+
+Start and enable the user-level MPD service:
+
+```bash
+systemctl --user enable --now mpd
+```
+
+---
+
+## 4. Configuring ncmpcpp & Visualizer
+
+Create the configuration file at `~/.config/ncmpcpp/config`:
+
+```ini
+# MPD Connection
+mpd_host = "127.0.0.1"
+mpd_port = "6600"
+lyrics_directory = "~/.config/ncmpcpp/lyrics"
+
+# Visualizer Settings
+visualizer_data_source = "/tmp/mpd.fifo"
+visualizer_output_name = "Visualizer Feed"
+visualizer_in_stereo = "yes"
+visualizer_type = "spectrum"
+visualizer_look = "●"
+
+# Look & Feel
+song_list_format = "{$4%a - }{%t}|{$8%f$9}"
+song_status_format = "{{%a{ - %t}} - %b}|{%f}"
+alternative_header_first_line_format = "$b$1$aqqu$/a$9 {%t}|{%f} $1$atqu$/a$9 rules"
+
+# UI Navigation
+header_visibility = "no"
+statusbar_visibility = "yes"
+titles_visibility = "no"
+enable_window_title = "yes"
+```
+
+---
+
+## 5. Playback & Visualizer Controls
+
+Launch ncmpcpp by typing:
+
+```bash
+ncmpcpp
+```
+
+Use these numeric keys to switch layouts:
+- `1` — Help menu
+- `2` — Current playlist queue
+- `3` — File browser (navigate folders in `~/Music`)
+- `4` — Search database
+- `5` — Media library (grouped by Artist, Album, etc.)
+- `8` — **Audio Visualizer screen** (press `space` to toggle visualizer types: wave, spectrum, columns)
+
+### Basic Keybindings
+
+- `u` — Update MPD music library database
+- `enter` — Play selected song
+- `s` — Stop
+- `p` — Pause / Resume
+- `>` — Next song
+- `<` — Previous song
+- `r` — Toggle repeat mode
+- `y` — Toggle single play mode
+
+This terminal setup gives you total command of your local audio library with near-zero resource consumption.

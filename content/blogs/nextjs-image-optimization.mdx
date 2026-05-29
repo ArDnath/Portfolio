@@ -1,26 +1,28 @@
----
-title: "Next.js Image Optimization & Edge CDN Integration"
-description: "How to achieve perfect Lighthouse scores by mastering Next.js Image component and offloading image transformation to external CDNs like ImageKit."
-date: "May 28, 2026"
-tags: ["nextjs", "cdn", "performance", "imagekit"]
-imageUrl: ""
----
+export const metadata = {
+  title: "Next.js Image Optimization & Edge CDN Integration",
+  description:
+    "How to achieve perfect Lighthouse scores by mastering the Next.js Image component and offloading transformations to external CDNs like ImageKit.",
+  date: "May 28, 2026",
+  tags: ["nextjs", "cdn", "performance", "imagekit"],
+  image_url: "", // ← Paste your ImageKit URL here to show a cover image
+}
 
-Images account for over **60% of the bytes** loaded on an average web page. If they aren't optimized, your site will feel sluggish, your search engine rankings (SEO) will take a hit due to Core Web Vitals (specifically Largest Contentful Paint - LCP), and users on slow networks will bounce.
+Images account for over **60% of the bytes** loaded on an average web page. If they aren't optimized, your site feels sluggish, Core Web Vitals suffer (especially Largest Contentful Paint), and users on slow networks bounce.
 
-In this guide, we'll cover how Next.js handles images natively, the serverless costs associated with it, and how to offload image operations to a dedicated CDN like **ImageKit.io** at zero scale cost.
+In this guide we cover how Next.js handles images natively, the serverless cost problem, and how to offload image operations to a dedicated CDN like **ImageKit.io** at zero scale cost.
 
 ---
 
 ## 1. The Core Power of `next/image`
-The Next.js `Image` component is a wrapper around the HTML `<img>` tag that automates critical web performance best practices:
 
-- **Cumulative Layout Shift (CLS) Prevention**: Requires explicit dimensions (`width` and `height`) or `fill` to reserve space on the page before loading.
-- **Responsive Srcsets**: Automatically generates multiple sizes so mobile users don't download large desktop-resolution files.
-- **Modern File Format Negotiation**: Serves WebP or AVIF images if the client browser supports them.
-- **Smart Lazy Loading**: Uses native browser lazy loading by default, fetching images only when they approach the viewport.
+The Next.js `Image` component wraps the HTML `<img>` tag and automates critical performance best practices:
 
-Here is a typical Next.js `Image` definition:
+- **CLS Prevention** — requires explicit `width` and `height` to reserve space before load
+- **Responsive Srcsets** — auto-generates multiple sizes; mobile users don't download desktop-scale files
+- **Modern Format Negotiation** — serves WebP or AVIF to supporting browsers automatically
+- **Smart Lazy Loading** — images below the fold are deferred until they approach the viewport
+
+Basic usage:
 
 ```tsx
 import Image from 'next/image'
@@ -32,7 +34,7 @@ export default function Avatar() {
       alt="User Profile"
       width={120}
       height={120}
-      priority // Prevents lazy loading for above-the-fold content (improves LCP)
+      priority
     />
   )
 }
@@ -40,75 +42,76 @@ export default function Avatar() {
 
 ---
 
-## 2. The Serverless Optimization Dilemma
-While `next/image` is amazing, the dynamic image optimization is executed on the **server** (often on Vercel's serverless functions). 
+## 2. The Serverless Optimization Problem
 
-When a user requests a custom size, Next.js:
-1. Downloads the source image.
-2. Uses the `sharp` library to crop, compress, and convert the image.
-3. Caches the result on Vercel's edge cache.
+While `next/image` is powerful, optimization runs on the **server** — on Vercel's serverless functions. When a user requests a custom size, Next.js:
 
-### The Cost:
-On Vercel's Hobby plan, there is a quota of **1,000 source images** optimized per month. On the Pro plan, going over the limit costs **$5 per additional 1,000 images**. If you have an application with hundreds of user-uploaded images, your Vercel bill can skyrocket overnight.
+1. Downloads the source image
+2. Uses `sharp` to crop, compress, and convert it
+3. Caches the result on Vercel's edge
+
+### The Cost
+
+On Vercel's Hobby plan there is a quota of **1,000 source images** per month. The Pro plan charges **$5 per additional 1,000 images**. For apps with many user-uploaded images, this can spike overnight.
 
 ---
 
-## 3. The Solution: External CDNs & Custom Image Loaders
-We can bypass serverless costs entirely by shifting the CPU-heavy image compression task to a specialized Media CDN (like **ImageKit**, **Cloudinary**, or **Cloudflare Images**).
+## 3. The Solution — External CDNs & Custom Loaders
 
-Dedicated CDNs offer edge-native transformations using URL query parameters. For example:
+Shift the CPU-heavy compression task to a dedicated Media CDN: **ImageKit**, **Cloudinary**, or **Cloudflare Images**. These CDNs apply transformations via URL parameters at the edge:
+
 `https://ik.imagekit.io/username/profile.jpg?tr=w-400,q-80,f-avif`
 
-### Implementing a Custom Loader in Next.js
-Next.js supports a `loader` property that allows us to construct the asset URLs dynamically.
+### Implementing a Custom Loader
 
-First, create a custom loader file at `lib/imagekit-loader.ts`:
+Next.js supports a `loader` option to construct asset URLs dynamically.
+
+Create `lib/imagekit-loader.ts`:
 
 ```typescript
-export default function imagekitLoader({ src, width, quality }: {
+export default function imagekitLoader({
+  src,
+  width,
+  quality,
+}: {
   src: string
   width: number
   quality?: number
 }) {
-  // If src is already a full CDN URL or an external domain, keep it
-  if (src.startsWith('http')) return src;
+  if (src.startsWith('http')) return src
 
-  // Remove leading slash if present
-  const relativeSrc = src.startsWith('/') ? src.slice(1) : src;
-  
-  const endpoint = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT;
-  if (!endpoint) {
-    return src; // Fallback
-  }
+  const relativeSrc = src.startsWith('/') ? src.slice(1) : src
+  const endpoint = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT
+  if (!endpoint) return src
 
-  // Construct parameters: w (width), q (quality, default to 75), f (auto-format)
-  const params = [`w-${width}`, `q-${quality || 75}`, 'f-auto'];
-  
-  return `${endpoint}/${relativeSrc}?tr=${params.join(',')}`;
+  const params = [`w-${width}`, `q-${quality || 75}`, 'f-auto']
+  return `${endpoint}/${relativeSrc}?tr=${params.join(',')}`
 }
 ```
 
-Now, configure Next.js to use this loader globally by modifying `next.config.ts`:
+Then configure `next.config.ts`:
 
 ```typescript
-import type { NextConfig } from "next";
+import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   images: {
     loader: "custom",
     loaderFile: "./lib/imagekit-loader.ts",
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig
 ```
 
 ---
 
-## 4. Performance Results & Key Takeaways
-By moving image optimization to the edge:
-1. **Compute savings**: Your serverless functions are completely unburdened from resizing images.
-2. **TTFB (Time to First Byte)**: Vercel cache misses no longer result in 2-3 second cold starts while resizing. Edge CDNs serve cached images in under 50ms globally.
-3. **Lighthouse Score**: Dynamic format negotiation ensures AVIF/WebP delivery, dropping image payload sizes by **up to 80%** without noticeable visual degradation.
+## 4. Performance Results
 
-Integrating a custom loader with ImageKit or Cloudinary is a highly scalable, standard pattern for high-performance Next.js architectures.
+By moving optimization to the edge:
+
+1. **Compute savings** — serverless functions are unburdened from resizing entirely
+2. **TTFB** — edge CDNs serve cached images in under 50ms globally; no cold-start resize lag
+3. **Lighthouse** — AVIF/WebP delivery drops image payload by **up to 80%** without visual loss
+
+This pattern is the standard for high-performance Next.js architectures at scale.

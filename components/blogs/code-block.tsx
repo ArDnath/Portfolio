@@ -21,41 +21,6 @@ export function CodeBlock({ language, code }: CodeBlockProps) {
     }
   }
 
-  // A simple but effective client-side syntax highlighter for code block display
-  const highlightCode = (rawCode: string, lang: string) => {
-    const cleanLang = lang.toLowerCase()
-    
-    // Escape HTML first to prevent injection
-    let html = rawCode
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-
-    if (["bash", "sh", "zsh", "dockerfile", "ini", "lua", "typescript", "tsx", "javascript", "json"].includes(cleanLang)) {
-      // 1. Highlight Comments
-      html = html.replace(/(#.*|\/\/.*|--.*)/g, '<span class="text-zinc-500 font-mono italic">$1</span>')
-      
-      // 2. Highlight Strings
-      html = html.replace(/(["'])(.*?)\1/g, '<span class="text-emerald-400 font-mono">$1$2$1</span>')
-      
-      // 3. Highlight Common Keywords
-      const keywords = [
-        "sudo", "pacman", "yay", "git", "clone", "install", "mkdir", "cd", "npm", "pnpm", "bun", "npx",
-        "bind", "input", "general", "animations", "monitor",
-        "return", "function", "local", "require", "import", "export", "const", "let", "from", "default", "as",
-        "FROM", "WORKDIR", "COPY", "RUN", "ENV", "USER", "EXPOSE", "CMD", "AS",
-      ]
-      
-      const keywordRegex = new RegExp(`\\b(${keywords.join("|")})\\b`, "g")
-      html = html.replace(keywordRegex, '<span class="text-violet-400 font-bold font-mono">$1</span>')
-
-      // 4. Highlight numbers
-      html = html.replace(/\b(\d+)\b/g, '<span class="text-amber-400 font-mono">$1</span>')
-    }
-
-    return <code className="block text-[11px] sm:text-[12px] font-mono leading-relaxed" dangerouslySetInnerHTML={{ __html: html }} />
-  }
-
   return (
     <div className="my-5 border border-dashed border-gray-300 dark:border-zinc-800 rounded-md overflow-hidden bg-zinc-950 font-mono text-zinc-300 shadow-md">
       {/* Terminal Window Header */}
@@ -92,7 +57,9 @@ export function CodeBlock({ language, code }: CodeBlockProps) {
       {/* Code Text Area */}
       <div className="p-4 overflow-x-auto no-scrollbar bg-black/60 select-text">
         <pre className="m-0 leading-relaxed">
-          {highlightCode(code, language)}
+          <code className="block text-[11px] sm:text-[12px] font-mono leading-relaxed text-zinc-300">
+            {code}
+          </code>
         </pre>
       </div>
     </div>

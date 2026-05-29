@@ -20,7 +20,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const lineRightRef        = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", "dark")
+    const savedTheme = localStorage.getItem("theme") as Theme | null
+    if (savedTheme) {
+      setTheme(savedTheme)
+      document.documentElement.setAttribute("data-theme", savedTheme)
+    } else {
+      document.documentElement.setAttribute("data-theme", "dark")
+    }
   }, [])
 
   const toggleTheme = useCallback(() => {
@@ -38,6 +44,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
     // ── Step 1: switch theme NOW so new content renders underneath ──
     document.documentElement.setAttribute("data-theme", next)
+    localStorage.setItem("theme", next)
     setTheme(next)
 
     // ── Step 2: cover the not-yet-swept halves with old bg colour ──
